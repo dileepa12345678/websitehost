@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkout</title>
+    <link rel="stylesheet" href="Checkout_CSS.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <a href="home.html"
+        ><img class="logo" src="Images/logo.JPG" alt="logo"
+      /></a>
+      <ul class="navigation-list-section">
+        <li><a href="home.html">HOME</a></li>
+        <li><a href="gallery.html">GALLERY</a></li>
+        <li><a href="shop.html" class="active">SHOP</a></li>
+        <li><a href="profile.html">USER&nbsp;&nbsp;PROFILE</a></li>
+        <li><a href="feedback.html">FEEDBACK</a></li>
+        <li><a href="team.html">ABOUT&nbsp;&nbsp;US</a></li>
+        <li><a href="sitemap.html">SITE&nbsp;&nbsp;MAP</a></li>
+      </ul>
+      <div></div>
+    </header>
+
+    <div class="checkout-container">
+      <h2>Checkout</h2>
+      <form id="checkout-form">
+        <!-- Contact Details Fieldset -->
+        <fieldset>
+          <legend><b>Contact Details</b></legend>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+          <div class="form-group">
+            <label for="telephone">Telephone</label>
+            <input type="tel" id="telephone" required />
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              placeholder="Street Address, City, State, Country, ZIP Code"
+              required
+            />
+          </div>
+        </fieldset>
+
+        <!-- Card Details Fieldset -->
+        <fieldset>
+          <legend><b>Card Details</b></legend>
+          <div class="form-group">
+            <label for="card-holder">Card Holder Name</label>
+            <input type="text" id="card-holder" required />
+          </div>
+          <div class="form-group">
+            <label for="card-number">Card Number (16 digits)</label>
+            <input type="text" id="card-number" required pattern="\d{16}" />
+            <small>Enter 16 digits code without spaces.</small>
+          </div>
+          <div class="form-group">
+            <label for="expiry-date">Expiry Date</label>
+            <input type="text" id="expiry-date" placeholder="MM/YY" required />
+          </div>
+          <div class="form-group">
+            <label for="cvv">CVV (3 digits)</label>
+            <input type="text" id="cvv" required pattern="\d{3}" />
+            <small>Enter the 3 digit code.</small>
+          </div>
+        </fieldset>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+          <div class="order-summary-items" id="order-summary-items"></div>
+          <p class="total-price">Total: $<span id="total-price"></span></p>
+        </div>
+
+        <!-- Place Order Button -->
+        <button type="button" onclick="placeOrder()">Place Order</button>
+      </form>
+    </div>
+
+    <!-- JavaScript to display order summary -->
+    <script>
+      // Function to display the order summary from the cart
+      function displayOrderSummary() {
+        // Get the cart items from local storage
+        const cart = JSON.parse(localStorage.getItem("cart"));
+        // Get the order summary container
+        const orderSummaryItems = document.getElementById(
+          "order-summary-items"
+        );
+        let totalPrice = 0;
+
+        // Clear previous summary items
+        orderSummaryItems.innerHTML = "";
+
+        // Iterate through each item in the cart
+        cart.forEach((item) => {
+          // Create a new element for each item
+          const itemElement = document.createElement("div");
+          itemElement.classList.add("order-summary-item");
+          // Set the inner HTML for the item element
+          itemElement.innerHTML = `
+            <span>${item.title}</span>
+            <span>${item.quantity} x $${item.price}</span>
+          `;
+          // Add the item element to the order summary container
+          orderSummaryItems.appendChild(itemElement);
+          // Calculate the total price
+          totalPrice += item.price * item.quantity;
+        });
+
+        // Set the total price in the summary
+        document.getElementById("total-price").textContent =
+          totalPrice.toFixed(2);
+      }
+
+      // Function to place the order
+      function placeOrder() {
+        // Get the values from the form inputs
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const telephone = document.getElementById("telephone").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const cardHolder = document.getElementById("card-holder").value.trim();
+        const cardNumber = document.getElementById("card-number").value.trim();
+        const expiryDate = document.getElementById("expiry-date").value.trim();
+        const cvv = document.getElementById("cvv").value.trim();
+
+        // Check if any required field is empty
+        if (
+          name === "" ||
+          email === "" ||
+          telephone === "" ||
+          address === "" ||
+          cardHolder === "" ||
+          cardNumber === "" ||
+          expiryDate === "" ||
+          cvv === ""
+        ) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        // Validate card number (16 digits)
+        if (!/^\d{16}$/.test(cardNumber)) {
+          alert("Please enter a valid 16-digit card number.");
+          return;
+        }
+
+        // Validate CVV (3 digits)
+        if (!/^\d{3}$/.test(cvv)) {
+          alert("Please enter a valid 3-digit CVV number.");
+          return;
+        }
+
+        // Display success message
+        alert("Order placed successfully!");
+
+        // Clear the cart in local storage
+        localStorage.removeItem("cart");
+
+        // Redirect to the home page
+        window.location.href = "home.html";
+      }
+
+      // Execute when the page is loaded
+      window.onload = function () {
+        displayOrderSummary();
+      };
+    </script>
+
+    <footer class="footer">
+      <p>Team Storm Crushers</p>
+      <ul class="footerlist">
+        <li>
+          <a href="pageeditorofstudent1.html" target="_blank"
+            >Tharusha Kodithuwakku</a
+          >
+        </li>
+        <li>
+          <a href="pageeditorofstudent2.html" target="_blank"
+            >Hasmini Kevinya</a
+          >
+        </li>
+        <li>
+          <a href="pageeditorofstudent3.html" target="_blank">Januda Perera</a>
+        </li>
+        <li>
+          <a href="pageeditorofstudent4.html" target="_blank">Dileepa Peiris</a>
+        </li>
+      </ul>
+    </footer>
+  </body>
+</html>
